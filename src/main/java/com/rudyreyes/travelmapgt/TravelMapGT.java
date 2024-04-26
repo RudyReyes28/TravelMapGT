@@ -9,7 +9,10 @@ import com.rudyreyes.travelmapgt.modelo.grafo.Grafo;
 import com.rudyreyes.travelmapgt.modelo.grafo.Nodo;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  *
@@ -21,13 +24,19 @@ public class TravelMapGT {
         
         Grafo grafos = new Grafo();
         String datos = "A|B|10|20|5|3|30\n" +
-"B|C|15|25|6|4|40\n" +
-"C|D|12|22|4|2|25\n" +
+"A|F|15|25|6|4|40\n" +
+"B|C|12|22|4|2|25\n" +
+"B|G|8|18|3|2|20\n" +
+"B|D|10|20|5|3|30\n" +
+"B|E|15|25|6|4|40\n" +
+"C|F|10|20|5|3|30\n" +
+"D|C|15|25|6|4|40\n" +
+"D|G|12|22|4|2|25\n" +
 "D|E|8|18|3|2|20\n" +
+"E|B|8|18|3|2|20\n" +
 "E|F|10|20|5|3|30\n" +
-"F|G|15|25|6|4|40\n" +
-"G|H|12|22|4|2|25\n" +
-"H|A|8|18|3|2|20";
+"F|D|15|25|6|4|40\n" +
+"F|G|10|20|5|3|30";
         
         cargarDatos(datos, grafos);
         
@@ -36,12 +45,14 @@ public class TravelMapGT {
         
         
        // Generar el archivo DOT
-        String dotFilePath = "graph.dot";
+       String dotFilePath = "graph.dot";
         generarArchivoDOT(dotFilePath, grafos);
 
         // Generar la imagen del grafo usando Graphviz
         String outputFormat = "png"; // Puedes cambiar el formato de salida aquí
         generarImagenGraphviz(dotFilePath, outputFormat);
+       int distanciaTotal = 0;
+        encontrarCaminos(grafos.buscarNodo("A"), grafos.buscarNodo("G"), new HashSet<>(), new ArrayList<>(), distanciaTotal);
     }
     
     public static void cargarDatos(String datosArchivo, Grafo grafo) {
@@ -96,8 +107,7 @@ public class TravelMapGT {
         try (FileWriter writer = new FileWriter(dotFilePath)) {
             writer.write("digraph G {\n");
             String archivo = grafo.imprimirGrafo();
-            
-            
+            writer.write("size=\"8,8\";\n");
             writer.write(archivo);
             writer.write("}\n");
             writer.flush();
@@ -107,7 +117,7 @@ public class TravelMapGT {
     }
 
     public static void generarImagenGraphviz(String dotFilePath, String outputFormat) {
-        String command = "dot -T" + outputFormat + " " + dotFilePath + " -o graph." + outputFormat;
+        String command = "dot -T" + outputFormat + " -Gratio=fill -o graph." + outputFormat + " " + dotFilePath;
         try {
             Process process = Runtime.getRuntime().exec(command);
             int exitCode = process.waitFor();
@@ -121,6 +131,41 @@ public class TravelMapGT {
         }
     }
         
-    
+    public static void encontrarCaminos(Nodo nodoActual, Nodo nodoDestino, Set<Nodo> visitados, ArrayList<Nodo> caminoActual, int distanciaTotal) {
+        // Marcar el nodo actual como visitado
+        visitados.add(nodoActual);
+
+        // Agregar el nodo actual al camino actual
+        caminoActual.add(nodoActual);
+        
+
+        // Si el nodo actual es el nodo destino, imprimir el camino actual
+        if (nodoActual.equals(nodoDestino)) {
+            imprimirCamino(caminoActual);
+            System.out.println("Distancia total: " + distanciaTotal);
+        } else {
+            // Recorrer todos los destinos del nodo actual
+            for (Arista arista : nodoActual.getDestinos()) {
+                Nodo siguienteNodo = arista.getDestino();
+                int peso = arista.getDistancia();
+                // Si el siguiente nodo no ha sido visitado aún, continuar explorando desde él
+                if (!visitados.contains(siguienteNodo)) {
+                    encontrarCaminos(siguienteNodo, nodoDestino, visitados, caminoActual, distanciaTotal+peso);
+                }
+            }
+        }
+
+        // Desmarcar el nodo actual como visitado y eliminarlo del camino actual
+        visitados.remove(nodoActual);
+        caminoActual.remove(nodoActual);
+    }
+
+    // Método para imprimir un camino
+    public static void imprimirCamino(ArrayList<Nodo> camino) {
+        for (Nodo nodo : camino) {
+            System.out.print(nodo.getNombreOrigen() + " -> ");
+        }
+        System.out.println();
+    }
     
 }

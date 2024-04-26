@@ -1,10 +1,17 @@
 digraph G {
-A->B
-B->C
-C->D
-D->E
-E->F
-F->G
-G->H
-H->A
+size="8,8";
+A->B[label="30"];
+A->F[label="40"];
+B->C[label="25"];
+B->G[label="20"];
+B->D[label="30"];
+B->E[label="40"];
+C->F[label="30"];
+D->C[label="40"];
+D->G[label="25"];
+D->E[label="20"];
+E->B[label="20"];
+E->F[label="30"];
+F->D[label="40"];
+F->G[label="30"];
 }

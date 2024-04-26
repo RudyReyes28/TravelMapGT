@@ -49,13 +49,14 @@ public class Grafo {
     }
     
     public String imprimirGrafo(){
+        //[label="5"];
         String grafo = "";
         for (Map.Entry<String, Nodo> entry : nodosOrigen.entrySet()) {
             Nodo nodo = entry.getValue();
             
             if(!nodo.getDestinos().isEmpty()){
                 for(Arista arista: nodo.getDestinos()){
-                    grafo +=nodo.getNombreOrigen()+"->"+arista.getDestino().getNombreOrigen()+"\n";
+                    grafo +=nodo.getNombreOrigen()+"->"+arista.getDestino().getNombreOrigen()+"[label=\""+arista.getDistancia()+"\"];"+"\n";
                 }
             }
            
