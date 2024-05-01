@@ -46,7 +46,7 @@ public class TravelMapGT {
         
        // Generar el archivo DOT
        String dotFilePath = "graph.dot";
-        generarArchivoDOT(dotFilePath, grafos);
+       generarArchivoDOT(dotFilePath, grafos);
 
         // Generar la imagen del grafo usando Graphviz
         String outputFormat = "png"; // Puedes cambiar el formato de salida aquí

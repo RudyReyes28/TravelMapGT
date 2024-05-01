@@ -39,6 +39,16 @@ public class Nodo {
     public ArrayList<Arista> getDestinos() {
         return destinos;
     }
+    
+    public Arista getDestino(String nombreDestino){
+        for(Arista arista: destinos){
+            if(arista.getDestino().getNombreOrigen().equals(nombreDestino)){
+                return arista;
+            }
+        }
+        
+        return null;
+    }
 
     public void setDestinos(ArrayList<Arista> destinos) {
         this.destinos = destinos;
