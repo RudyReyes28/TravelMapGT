@@ -58,10 +58,25 @@ public class RecorridosGrafo {
     
     public static String imprimirRuta(List<Nodo> camino){
         String ruta = "";
+        //String nodoOrigen = camino.get(0).getNombreOrigen();
+        //String destino=null;
         
+        int distancia = 0;
+        //A->B->C->D
+        for(int i=0; i<camino.size(); i++){
+            ruta += camino.get(i).getNombreOrigen()+" ->";
+            if(i+1<camino.size()){
+                distancia += camino.get(i).getDestino(camino.get(i+1).getNombreOrigen()).getDistancia();
+            }
+        }
+        
+        ruta += "   distancia total"+distancia;
+        
+        /*
         for (Nodo nodo : camino) {
             ruta += nodo.getNombreOrigen() + " -> ";
-        }
+            
+        }*/
         
         return ruta;
     }

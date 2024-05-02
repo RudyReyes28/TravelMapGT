@@ -7,6 +7,7 @@ package com.rudyreyes.travelmapgt.vista;
 import com.rudyreyes.travelmapgt.controlador.CargarDatos;
 import com.rudyreyes.travelmapgt.controlador.Graficas;
 import com.rudyreyes.travelmapgt.controlador.RecorridosGrafo;
+import com.rudyreyes.travelmapgt.controlador.Reloj;
 import com.rudyreyes.travelmapgt.modelo.grafo.Grafo;
 import com.rudyreyes.travelmapgt.modelo.grafo.Nodo;
 import java.awt.Image;
@@ -14,6 +15,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -26,7 +28,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  * @author rudyo
  */
 public class VentanaPrincipal extends javax.swing.JFrame {
-
+    private Reloj reloj;
     private Grafo grafos;
     /**
      * Creates new form VentanaPrincipal
@@ -35,6 +37,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         grafos = new Grafo();
         initComponents();
         
+         
+        reloj = new Reloj(areaReloj);
+        reloj.start();
         this.setLocationRelativeTo(null);
     }
 
@@ -70,6 +75,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         areaDeRutas = new javax.swing.JTextArea();
         botonEmpezarViaje = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
+        areaReloj = new javax.swing.JTextField();
+        botonPararHora = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("TravelMap GT");
@@ -147,6 +155,20 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        jLabel10.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
+        jLabel10.setText("Hora:");
+
+        areaReloj.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
+        areaReloj.setText("18:44");
+
+        botonPararHora.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
+        botonPararHora.setText("Parar");
+        botonPararHora.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonPararHoraActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -154,9 +176,9 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(14, 14, 14)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -196,16 +218,24 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
                                         .addComponent(etiquetaGrafoImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 515, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 638, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGap(6, 6, 6)
-                                    .addComponent(cargarRutas)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(cargarTrafico))
-                                .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 17, Short.MAX_VALUE)))
-                .addContainerGap())
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 638, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 17, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(cargarRutas)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(cargarTrafico))
+                            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel10)
+                        .addGap(18, 18, 18)
+                        .addComponent(areaReloj, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(botonPararHora, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(44, 44, 44))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -215,7 +245,10 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cargarRutas)
-                    .addComponent(cargarTrafico))
+                    .addComponent(cargarTrafico)
+                    .addComponent(jLabel10)
+                    .addComponent(areaReloj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(botonPararHora))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -250,7 +283,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jSeparator1)
-                            .addComponent(etiquetaGrafoImagen, javax.swing.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE))
+                            .addComponent(etiquetaGrafoImagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(10, 10, 10)))
                 .addComponent(jLabel9)
                 .addGap(13, 13, 13)
@@ -352,6 +385,44 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cargarTraficoActionPerformed
 
+    private void botonPararHoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonPararHoraActionPerformed
+        boolean detenido = reloj.isRunning();
+        //System.out.println("Estado "+detenido);
+        if(detenido){
+            reloj.setRunning(false);
+            botonPararHora.setText("Reanudar");
+        }else{
+            //detenido
+            String horarioActual = areaReloj.getText();
+            String[] partes = horarioActual.split(":");
+            String horaStr = partes[0]; // La parte antes de ":"
+            String minutoStr = partes[1]; // La parte después de ":"
+
+            // Convertir las partes a enteros si es necesario
+            int hora = Integer.parseInt(horaStr);
+            int minuto = Integer.parseInt(minutoStr);
+            //System.out.println("Hora: " + hora);
+            //System.out.println("Minuto: " + minuto);
+            
+            // Detener el reloj actual si ya está en funcionamiento
+            if (reloj.isAlive()) {
+                reloj.setRunning(false);
+                try {
+                    reloj.join(); // Esperar a que el hilo de reloj termine
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // Crear un nuevo hilo de reloj con la hora y los minutos actualizados
+            reloj = new Reloj(areaReloj);
+            reloj.setHora(hora);
+            reloj.setMinutos(minuto);
+            reloj.start(); // Iniciar el nuevo hilo de reloj
+            botonPararHora.setText("Parar");
+        }
+    }//GEN-LAST:event_botonPararHoraActionPerformed
+
     private void generarGrafoPrincipal(){
         String dotFilePath = "grafoP.dot";
         Graficas.generarArchivoDOT(dotFilePath, grafos);
@@ -419,11 +490,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea areaDeRutas;
+    private javax.swing.JTextField areaReloj;
     private javax.swing.JButton botonEmpezarViaje;
+    private javax.swing.JButton botonPararHora;
     private javax.swing.JButton cargarRutas;
     private javax.swing.JButton cargarTrafico;
     private javax.swing.JLabel etiquetaGrafoImagen;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
