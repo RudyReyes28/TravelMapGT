@@ -4,9 +4,17 @@
  */
 package com.rudyreyes.travelmapgt.controlador;
 
+import com.rudyreyes.travelmapgt.modelo.grafo.Arista;
 import com.rudyreyes.travelmapgt.modelo.grafo.Grafo;
+import com.rudyreyes.travelmapgt.modelo.grafo.Nodo;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -28,8 +36,8 @@ public class Graficas {
         }
     }
 
-    public static void generarImagenGrafo(String dotFilePath, String outputFormat) {
-        String command = "dot -T" + outputFormat + " -Gratio=fill -o grafoP." + outputFormat + " " + dotFilePath;
+    public static void generarImagenGrafo(String dotFilePath, String nombreImagen) {
+        String command = "dot -T png -Gratio=fill -o " + nombreImagen + " " + dotFilePath;
         try {
             Process process = Runtime.getRuntime().exec(command);
             int exitCode = process.waitFor();
@@ -41,5 +49,73 @@ public class Graficas {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+    }
+    
+    public static void generarArchivoDOTRutasSeleccionadas(String dotFilePath, Grafo grafo, List<List<Nodo>> todasLasRutas, String destino) {
+        Set<String> rutasSeleccionadas = rutasSeleccionadas(todasLasRutas);
+        try (FileWriter writer = new FileWriter(dotFilePath)) {
+            writer.write("digraph G {\n");
+            
+            HashMap<String, Nodo> nodosOrigen = grafo.getNodosOrigen();
+            
+            String grafoD = "";
+            for (Map.Entry<String, Nodo> entry : nodosOrigen.entrySet()) {
+                Nodo nodo = entry.getValue();
+
+                if (!nodo.getDestinos().isEmpty()) {
+                    for (Arista arista : nodo.getDestinos()) {
+                        String flechas = nodo.getNombreOrigen() + "->" + arista.getDestino().getNombreOrigen();
+                        if (rutaEncontrada(rutasSeleccionadas, flechas)) {
+
+                            grafoD += nodo.getNombreOrigen() + "[style=filled, fillcolor=blue];\n";
+                            grafoD += flechas + "[color=green]" + "[label=\"" + arista.getDistancia() + "\"];" + "\n";
+                        } else {
+                            grafoD += flechas + "[label=\"" + arista.getDistancia() + "\"];" + "\n";
+                        }
+                    }
+                }
+
+            }
+            grafoD += destino +"[style=filled, fillcolor=red];\n";
+            writer.write("size=\"8,8\";\n");
+            writer.write(grafoD);
+            writer.write("}\n");
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private static boolean rutaEncontrada(Set<String> rutas, String ruta){
+        //System.out.println(ruta);
+        for(String flecha: rutas){
+            //System.out.println("Set: "+flecha);
+            if(flecha.equalsIgnoreCase(ruta)){
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    private static Set<String> rutasSeleccionadas(List<List<Nodo>> todasLasRutas){
+        List<String> rutasGrap = new ArrayList<>();
+        for (List<Nodo> ruta : todasLasRutas) {
+                
+            for(int i=0; i<ruta.size(); i++){
+                if (i + 1 < ruta.size()) {
+                    Nodo nodoActual = ruta.get(i);
+                    Nodo nodoSiguiente = ruta.get(i + 1);
+                    String conexiones = nodoActual.getNombreOrigen()+"->"+nodoSiguiente.getNombreOrigen();
+                    rutasGrap.add(conexiones);
+                }
+                
+            }
+                
+        }
+        
+        Set<String> conjuntoElementos = new HashSet<>(rutasGrap);
+        
+        return conjuntoElementos;
     }
 }

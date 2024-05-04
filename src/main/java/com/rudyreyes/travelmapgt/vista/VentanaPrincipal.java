@@ -10,6 +10,7 @@ import com.rudyreyes.travelmapgt.controlador.RecorridosGrafo;
 import com.rudyreyes.travelmapgt.controlador.Reloj;
 import com.rudyreyes.travelmapgt.modelo.grafo.Grafo;
 import com.rudyreyes.travelmapgt.modelo.grafo.Nodo;
+import java.awt.Desktop;
 import java.awt.Image;
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,10 +18,13 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -30,6 +34,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class VentanaPrincipal extends javax.swing.JFrame {
     private Reloj reloj;
     private Grafo grafos;
+    private List<List<Nodo>> todasLasRutas;
     /**
      * Creates new form VentanaPrincipal
      */
@@ -78,6 +83,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         areaReloj = new javax.swing.JTextField();
         botonPararHora = new javax.swing.JButton();
+        botonAvanzar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("TravelMap GT");
@@ -169,6 +175,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             }
         });
 
+        botonAvanzar.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
+        botonAvanzar.setText("Avanzar");
+        botonAvanzar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonAvanzarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -182,7 +196,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(14, 14, 14)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel9)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -213,12 +226,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                                                 .addComponent(jLabel5))
                                             .addGroup(jPanel1Layout.createSequentialGroup()
                                                 .addGap(55, 55, 55)
-                                                .addComponent(botonEmpezarViaje)))
+                                                .addComponent(botonEmpezarViaje))
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addGap(66, 66, 66)
+                                                .addComponent(botonAvanzar)))
                                         .addGap(18, 18, 18)
                                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
                                         .addComponent(etiquetaGrafoImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 515, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 638, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel9)
+                                        .addGap(35, 35, 35)
+                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 638, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(0, 17, Short.MAX_VALUE)))
                         .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -279,16 +298,22 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(sigPosicion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(posActual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(4, 4, 4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(botonAvanzar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jSeparator1)
                             .addComponent(etiquetaGrafoImagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(10, 10, 10)))
-                .addComponent(jLabel9)
-                .addGap(13, 13, 13)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                        .addGap(35, 35, 35)))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(49, 49, 49)
+                        .addComponent(jLabel9)
+                        .addGap(45, 45, 45))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(15, 15, 15))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -337,27 +362,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         String origen = nodoOrigen.getText();
         String destino = nodoDestino.getText();
         
-        String tipoDeViaje = (String) jcomboTipoViaje.getSelectedItem();
-        if (tipoDeViaje.equalsIgnoreCase("Vehiculo")) {
-            List<List<Nodo>> todasLasRutas = new ArrayList<>();
-            int distanciaTotal = 0;
-            RecorridosGrafo.encontrarCaminosVehiculo(grafos.buscarNodo(origen), grafos.buscarNodo(destino), new HashSet<>(), new ArrayList<>(), distanciaTotal, todasLasRutas);
-            String rutas="";
-            for (List<Nodo> ruta : todasLasRutas) {
-                // Trabajar con cada ruta aquí
-                rutas += RecorridosGrafo.imprimirRuta( ruta, obtenerHora())+"\n";
-                
-            }
-            System.out.println(rutas);
-            
-            
-            areaDeRutas.setText(RecorridosGrafo.imprimirRutasVehiculo(todasLasRutas, obtenerHora()));
-
-        }else{
-            //AQUI SI ES CAMINANDO
-        }
+        recorrerViaje(origen, destino);
+        posActual.setText(origen);
         
         
+        generarGrafoRutas();
     }//GEN-LAST:event_botonEmpezarViajeActionPerformed
 
     private void cargarTraficoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarTraficoActionPerformed
@@ -394,6 +403,51 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
             // Convertir las partes a enteros si es necesario
             return Integer.parseInt(horaStr);
+    }
+    
+    private void recorrerViaje(String origen, String destino){
+        String tipoDeViaje = (String) jcomboTipoViaje.getSelectedItem();
+        if (tipoDeViaje.equalsIgnoreCase("Vehiculo")) {
+            todasLasRutas = new ArrayList<>();
+            int distanciaTotal = 0;
+            RecorridosGrafo.encontrarCaminosVehiculo(grafos.buscarNodo(origen), grafos.buscarNodo(destino), new HashSet<>(), new ArrayList<>(), distanciaTotal, todasLasRutas);
+            
+            /*String rutas="";
+            for (List<Nodo> ruta : todasLasRutas) {
+                // Trabajar con cada ruta aquí
+                rutas += RecorridosGrafo.imprimirRuta( ruta, obtenerHora())+"\n";
+                
+            }*/
+            //System.out.println(rutas);
+            
+            
+            areaDeRutas.setText(RecorridosGrafo.imprimirRutasVehiculo(todasLasRutas, obtenerHora()));
+
+        }else{
+            //AQUI SI ES CAMINANDO
+        }
+        sigPosicion.removeAllItems();
+        
+        if(posActual.getText()==null){
+            posActual.setText(nodoOrigen.getText());
+        }
+        List<String> elementos = new ArrayList<>();
+        
+        
+        for (List<Nodo> ruta : todasLasRutas) {
+                if(1<ruta.size()){
+                    elementos.add(ruta.get(1).getNombreOrigen());
+                }
+                
+        }
+        Set<String> conjuntoElementos = new HashSet<>(elementos);
+        
+        if(conjuntoElementos.isEmpty()){
+            JOptionPane.showMessageDialog(null, "FELICIDADES LLEGÓ A SU DESTINO");
+        }
+        for (String elemento : conjuntoElementos) {
+            sigPosicion.addItem(elemento);
+        }
     }
     
     private void botonPararHoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonPararHoraActionPerformed
@@ -434,12 +488,26 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_botonPararHoraActionPerformed
 
+    private void botonAvanzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAvanzarActionPerformed
+        
+        String origen = (String) sigPosicion.getSelectedItem();
+        String destino = nodoDestino.getText();
+        
+        recorrerViaje(origen, destino);
+        
+        generarGrafoRutas();
+        posActual.setText(origen);
+        
+        
+        
+    }//GEN-LAST:event_botonAvanzarActionPerformed
+
     private void generarGrafoPrincipal(){
         String dotFilePath = "grafoP.dot";
         Graficas.generarArchivoDOT(dotFilePath, grafos);
 
         // Generar la imagen del grafo usando Graphviz
-        String outputFormat = "png"; // Puedes cambiar el formato de salida aquí
+        String outputFormat = "grafoP.png"; // Puedes cambiar el formato de salida aquí
         Graficas.generarImagenGrafo(dotFilePath, outputFormat);
         
         try{
@@ -463,6 +531,24 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
 
         
+    }
+    
+    private void generarGrafoRutas(){
+        String dotFilePath = "grafoRutas.dot";
+        Graficas.generarArchivoDOTRutasSeleccionadas(dotFilePath, grafos, todasLasRutas, nodoDestino.getText());
+
+        // Generar la imagen del grafo usando Graphviz
+        String outputFormat = "grafoRutas.png"; // Puedes cambiar el formato de salida aquí
+        Graficas.generarImagenGrafo(dotFilePath, outputFormat);
+        
+        try {
+            String imagePath;
+            File imageFile = new File(outputFormat);
+            Desktop desktop = Desktop.getDesktop();
+            desktop.open(imageFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     /**
      * @param args the command line arguments
@@ -502,6 +588,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea areaDeRutas;
     private javax.swing.JTextField areaReloj;
+    private javax.swing.JButton botonAvanzar;
     private javax.swing.JButton botonEmpezarViaje;
     private javax.swing.JButton botonPararHora;
     private javax.swing.JButton cargarRutas;

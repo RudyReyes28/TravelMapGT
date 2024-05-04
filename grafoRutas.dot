@@ -1,0 +1,29 @@
+digraph G {
+size="8,8";
+A->B[label="30"];
+A->F[label="40"];
+B[style=filled, fillcolor=blue];
+B->C[color=green][label="25"];
+B[style=filled, fillcolor=blue];
+B->G[color=green][label="20"];
+B[style=filled, fillcolor=blue];
+B->D[color=green][label="30"];
+B[style=filled, fillcolor=blue];
+B->E[color=green][label="40"];
+C[style=filled, fillcolor=blue];
+C->F[color=green][label="30"];
+D[style=filled, fillcolor=blue];
+D->C[color=green][label="40"];
+D[style=filled, fillcolor=blue];
+D->G[color=green][label="25"];
+D[style=filled, fillcolor=blue];
+D->E[color=green][label="20"];
+E->B[label="20"];
+E[style=filled, fillcolor=blue];
+E->F[color=green][label="30"];
+F[style=filled, fillcolor=blue];
+F->D[color=green][label="40"];
+F[style=filled, fillcolor=blue];
+F->G[color=green][label="30"];
+G[style=filled, fillcolor=red];
+}

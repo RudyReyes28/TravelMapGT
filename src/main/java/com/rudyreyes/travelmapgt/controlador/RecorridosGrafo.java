@@ -135,7 +135,7 @@ public class RecorridosGrafo {
             //A->B->C->D
             for (int i = 0; i < camino.size(); i++) {
                 ruta += camino.get(i).getNombreOrigen() + " ->";
-                System.out.println("Ruta"+ ruta);
+                //System.out.println("Ruta"+ ruta);
                 if (i + 1 < camino.size()) {
                     int distanciaC = camino.get(i).getDestino(camino.get(i + 1).getNombreOrigen()).getDistancia();
                     distancia += distanciaC;
@@ -143,11 +143,11 @@ public class RecorridosGrafo {
 
                     int tiempo = camino.get(i).getDestino(camino.get(i + 1).getNombreOrigen()).getTiempoVehiculo();
                     double probabilidad = obtenerProbabilidad(camino.get(i).getDestino(camino.get(i + 1).getNombreOrigen()), horaT);
-                    System.out.println("Tiempo: "+tiempo+" Hora: "+horaT+" Probabilidad: "+probabilidad);
+                    //System.out.println("Tiempo: "+tiempo+" Hora: "+horaT+" Probabilidad: "+probabilidad);
 
                     double rapidez = distanciaC / (tiempo * (1 + probabilidad));
                     
-                    System.out.println("Rapidez" + rapidez);
+                    //System.out.println("Rapidez" + rapidez);
                     velocidades.add(rapidez);
 
                     horaT += tiempo;

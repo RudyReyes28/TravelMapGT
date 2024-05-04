@@ -64,4 +64,10 @@ public class Grafo {
         
         return grafo;
     }
+
+    public HashMap<String, Nodo> getNodosOrigen() {
+        return nodosOrigen;
+    }
+    
+    
 }
