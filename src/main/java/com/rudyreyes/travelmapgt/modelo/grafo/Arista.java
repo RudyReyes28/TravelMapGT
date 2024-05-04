@@ -4,6 +4,9 @@
  */
 package com.rudyreyes.travelmapgt.modelo.grafo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author rudyo
@@ -15,9 +18,7 @@ public class Arista {
     private int consumoGas;
     private int desgastePersona;
     private int distancia;
-    private int tHoraInicio;
-    private int tHoraFinal;
-    private int tProbabilidad;
+    private List<Trafico> trafico;
 
     public Arista(Nodo destino, int tiempoVehiculo, int tiempoPie, int consumoGas, int desgastePersona, int distancia) {
         this.destino = destino;
@@ -26,22 +27,12 @@ public class Arista {
         this.consumoGas = consumoGas;
         this.desgastePersona = desgastePersona;
         this.distancia = distancia;
+        this.trafico = new ArrayList<>();
     }
 
     public Arista() {
     }
 
-    public Arista(Nodo destino, int tiempoVehiculo, int tiempoPie, int consumoGas, int desgastePersona, int distancia, int tHoraInicio, int tHoraFinal, int tProbabilidad) {
-        this.destino = destino;
-        this.tiempoVehiculo = tiempoVehiculo;
-        this.tiempoPie = tiempoPie;
-        this.consumoGas = consumoGas;
-        this.desgastePersona = desgastePersona;
-        this.distancia = distancia;
-        this.tHoraInicio = tHoraInicio;
-        this.tHoraFinal = tHoraFinal;
-        this.tProbabilidad = tProbabilidad;
-    }
 
     public Nodo getDestino() {
         return destino;
@@ -91,33 +82,26 @@ public class Arista {
         this.distancia = distancia;
     }
 
-    public int gettHoraInicio() {
-        return tHoraInicio;
+
+    public List<Trafico> getTrafico() {
+        return trafico;
     }
 
-    public void settHoraInicio(int tHoraInicio) {
-        this.tHoraInicio = tHoraInicio;
+    public void setTrafico(List<Trafico> trafico) {
+        this.trafico = trafico;
     }
-
-    public int gettHoraFinal() {
-        return tHoraFinal;
-    }
-
-    public void settHoraFinal(int tHoraFinal) {
-        this.tHoraFinal = tHoraFinal;
-    }
-
-    public int gettProbabilidad() {
-        return tProbabilidad;
-    }
-
-    public void settProbabilidad(int tProbabilidad) {
-        this.tProbabilidad = tProbabilidad;
+    
+    public void setTrafico(Trafico trafico) {
+        this.trafico.add(trafico);
     }
 
     @Override
     public String toString() {
-        return "Arista{" + "destino=" + destino.getNombreOrigen() + ", \ntiempoVehiculo=" + tiempoVehiculo + ", \ntiempoPie=" + tiempoPie + ", \nconsumoGas=" + consumoGas + ", \ndesgastePersona=" + desgastePersona + ", \ndistancia=" + distancia + ", \ntHoraInicio=" + tHoraInicio + ", \ntHoraFinal=" + tHoraFinal + ", \ntProbabilidad=" + tProbabilidad + '}';
+        String datos = "Arista{" + "destino=" + destino.getNombreOrigen() + ", \ntiempoVehiculo=" + tiempoVehiculo + ", \ntiempoPie=" + tiempoPie + ", \nconsumoGas=" + consumoGas + ", \ndesgastePersona=" + desgastePersona + ", \ndistancia=" + distancia ;
+        for(Trafico t: trafico){
+            datos += "\n"+t.imprimirTrafico();
+        }
+        return datos;
     }
     
     

@@ -5,7 +5,9 @@
 package com.rudyreyes.travelmapgt.controlador;
 
 import com.rudyreyes.travelmapgt.modelo.grafo.Arista;
+import com.rudyreyes.travelmapgt.modelo.grafo.MejoresRutasTrafico;
 import com.rudyreyes.travelmapgt.modelo.grafo.Nodo;
+import com.rudyreyes.travelmapgt.modelo.grafo.Trafico;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -56,22 +58,47 @@ public class RecorridosGrafo {
     }
     
     
-    public static String imprimirRuta(List<Nodo> camino){
+    public static String imprimirRuta(List<Nodo> camino, int hora){
+        int horaT = hora;
+        List<Double> velocidades = new ArrayList<>();
         String ruta = "";
-        //String nodoOrigen = camino.get(0).getNombreOrigen();
-        //String destino=null;
         
         int distancia = 0;
+        int gasolina = 0;
         //A->B->C->D
         for(int i=0; i<camino.size(); i++){
             ruta += camino.get(i).getNombreOrigen()+" ->";
             if(i+1<camino.size()){
-                distancia += camino.get(i).getDestino(camino.get(i+1).getNombreOrigen()).getDistancia();
+                int distanciaC =camino.get(i).getDestino(camino.get(i+1).getNombreOrigen()).getDistancia();
+                distancia += distanciaC;
+                gasolina += camino.get(i).getDestino(camino.get(i+1).getNombreOrigen()).getConsumoGas();
+            
+                int tiempo = camino.get(i).getDestino(camino.get(i+1).getNombreOrigen()).getTiempoVehiculo();
+                double probabilidad = obtenerProbabilidad(camino.get(i).getDestino(camino.get(i+1).getNombreOrigen()), horaT);
+                //System.out.println("Tiempo: "+tiempo+" Hora: "+horaT+" Probabilidad: "+probabilidad);
+                
+                double rapidez = distanciaC / (tiempo *(1+probabilidad));
+                velocidades.add(rapidez);
+                
+                
+                horaT+=tiempo;
+                if(horaT>=24){
+                    horaT = 0+tiempo-1;
+                }
             }
         }
         
-        ruta += "   distancia total"+distancia;
+        double sumaVelocidades = 0.0;
+        for (double velocidad : velocidades) {
+            sumaVelocidades += velocidad;
+        }
+
+        double promedioVelocidades = sumaVelocidades / velocidades.size();
         
+        ruta += "\n   distancia total: "+distancia;
+        ruta += " gasolina total: " + gasolina;
+        ruta += " promedio gasolina distancia: "+ (double) distancia/gasolina;
+        ruta += " rapidez: "+promedioVelocidades;
         /*
         for (Nodo nodo : camino) {
             ruta += nodo.getNombreOrigen() + " -> ";
@@ -80,4 +107,137 @@ public class RecorridosGrafo {
         
         return ruta;
     }
+    
+    public static String imprimirRutasVehiculo(List<List<Nodo>> todasLasRutas, int hora) {
+        //String rutas = "";
+        MejoresRutasTrafico rutas = new MejoresRutasTrafico();
+
+        int mejorGas = 0;
+        int peorGas = 0;
+        int mejorDistancia = 0;
+        int peorDistancia = 0;
+        double mejorPromGasD = 0;
+        double peorPromGasD = 0;
+        double mejorRap = 0;
+        double peorRap = 0;
+        int iteracion = 0;
+        for (List<Nodo> camino : todasLasRutas) {
+            //RUTAS ESPECIFICAS
+            
+            
+            // Trabajar con cada ruta aquí
+            int horaT = hora;
+            List<Double> velocidades = new ArrayList<>();
+            String ruta = "";
+
+            int distancia = 0;
+            int gasolina = 0;
+            //A->B->C->D
+            for (int i = 0; i < camino.size(); i++) {
+                ruta += camino.get(i).getNombreOrigen() + " ->";
+                System.out.println("Ruta"+ ruta);
+                if (i + 1 < camino.size()) {
+                    int distanciaC = camino.get(i).getDestino(camino.get(i + 1).getNombreOrigen()).getDistancia();
+                    distancia += distanciaC;
+                    gasolina += camino.get(i).getDestino(camino.get(i + 1).getNombreOrigen()).getConsumoGas();
+
+                    int tiempo = camino.get(i).getDestino(camino.get(i + 1).getNombreOrigen()).getTiempoVehiculo();
+                    double probabilidad = obtenerProbabilidad(camino.get(i).getDestino(camino.get(i + 1).getNombreOrigen()), horaT);
+                    System.out.println("Tiempo: "+tiempo+" Hora: "+horaT+" Probabilidad: "+probabilidad);
+
+                    double rapidez = distanciaC / (tiempo * (1 + probabilidad));
+                    
+                    System.out.println("Rapidez" + rapidez);
+                    velocidades.add(rapidez);
+
+                    horaT += tiempo;
+                    if (horaT >= 24) {
+                        horaT = 0 + tiempo - 1;
+                    }
+                }
+            }
+
+            double sumaVelocidades = 0.0;
+            for (double velocidad : velocidades) {
+                sumaVelocidades += velocidad;
+            }
+
+            double promedioVelocidades = sumaVelocidades / velocidades.size();
+
+            double promGasDis = (double) distancia / gasolina;
+            /*ruta += "\n   distancia total: " + distancia;
+            ruta += " gasolina total: " + gasolina;
+            ruta += " promedio gasolina distancia: " + (double) distancia / gasolina;
+            ruta += " rapidez: " + promedioVelocidades;*/
+
+            //PARA DISTANCIA
+            if(iteracion == 0){
+                mejorDistancia = distancia;
+                peorDistancia = distancia;
+                mejorGas = gasolina;
+                peorGas = gasolina;
+                mejorPromGasD = promGasDis;
+                peorPromGasD = promGasDis;
+                mejorRap = promedioVelocidades;
+                peorRap = promedioVelocidades;
+                
+                rutas.rutasIniciales(ruta);
+            }else{
+                //DISTANCIA
+                if(distancia<=mejorDistancia){
+                    rutas.setMejorDistancia(ruta);
+                    mejorDistancia = distancia;
+                }else if(distancia>=peorDistancia){
+                    rutas.setPeorDistancia(ruta);
+                    peorDistancia = distancia;
+                }
+                
+                //GASOLINA
+                if(gasolina<= mejorGas){
+                    rutas.setMejorGasolina(ruta);
+                    mejorGas =gasolina;
+                }else if(gasolina >= peorGas){
+                    rutas.setPeorGasolina(ruta);
+                    peorGas=gasolina;
+                }
+                
+                //DISTANCIA/GAS
+                if(promGasDis<= mejorPromGasD){
+                    rutas.setMejorPromGasD(ruta);
+                    mejorPromGasD = promGasDis;
+                }else if(promGasDis >= peorPromGasD){
+                    rutas.setPeorPromGasD(ruta);
+                    peorPromGasD = promGasDis;
+                }
+                
+                //RAPIDEZ
+                if(promedioVelocidades>= mejorRap){
+                    rutas.setMejorRapidez(ruta);
+                    mejorRap = promedioVelocidades;
+                }else if(promedioVelocidades <= peorRap){
+                    rutas.setPeorRapidez(ruta);
+                    peorRap = promedioVelocidades;
+                }
+                
+            }
+            
+            iteracion ++;
+        }
+        
+        return rutas.imprimirRutas();
+    }
+    
+    private static double obtenerProbabilidad(Arista destino, int hora){
+        
+        for (Trafico t : destino.getTrafico()) {
+            //System.out.println("Hora Inicial : "+t.getHoraInicial()+ " hora final "+ t.getHoraFinal());
+            if (hora >= t.getHoraInicial() && hora <= t.getHoraFinal()) {
+                return t.getProbabilidad() / 100f;
+            } 
+        }
+        
+        return 0;
+        
+        
+    } 
 }

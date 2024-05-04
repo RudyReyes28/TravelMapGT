@@ -345,11 +345,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             String rutas="";
             for (List<Nodo> ruta : todasLasRutas) {
                 // Trabajar con cada ruta aquí
-                rutas += RecorridosGrafo.imprimirRuta( ruta)+"\n";
+                rutas += RecorridosGrafo.imprimirRuta( ruta, obtenerHora())+"\n";
                 
             }
+            System.out.println(rutas);
             
-            areaDeRutas.setText(rutas);
+            
+            areaDeRutas.setText(RecorridosGrafo.imprimirRutasVehiculo(todasLasRutas, obtenerHora()));
 
         }else{
             //AQUI SI ES CAMINANDO
@@ -385,6 +387,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_cargarTraficoActionPerformed
 
+    private int obtenerHora(){
+        String horarioActual = areaReloj.getText();
+            String[] partes = horarioActual.split(":");
+            String horaStr = partes[0]; // La parte antes de ":"
+
+            // Convertir las partes a enteros si es necesario
+            return Integer.parseInt(horaStr);
+    }
+    
     private void botonPararHoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonPararHoraActionPerformed
         boolean detenido = reloj.isRunning();
         //System.out.println("Estado "+detenido);

@@ -83,9 +83,8 @@ public class CargarDatos {
                         Arista arista = nodoOrigen.getDestino(destino);
                         
                         if(arista!=null){
-                            arista.settHoraInicio(horaInicio);
-                            arista.settHoraFinal(horaFinal);
-                            arista.settProbabilidad(probTrafico);
+                            
+                            arista.setTrafico(new Trafico(horaInicio, horaFinal, probTrafico));
                         }
                     }
                 }
