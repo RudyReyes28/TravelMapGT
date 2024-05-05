@@ -26,10 +26,10 @@ import java.util.Set;
  */
 public class TravelMapGT {
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         
     }
-        
+        */
     
     
 
