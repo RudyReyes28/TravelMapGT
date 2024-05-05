@@ -10,6 +10,7 @@ import com.rudyreyes.travelmapgt.controlador.GraficasArbolB;
 import com.rudyreyes.travelmapgt.controlador.RecorridosGrafo;
 import com.rudyreyes.travelmapgt.controlador.Reloj;
 import com.rudyreyes.travelmapgt.modelo.arbolb.ArbolB;
+import com.rudyreyes.travelmapgt.modelo.grafo.Arista;
 import com.rudyreyes.travelmapgt.modelo.grafo.Grafo;
 import com.rudyreyes.travelmapgt.modelo.grafo.Nodo;
 import java.awt.Desktop;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
@@ -68,9 +70,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        nodoOrigen = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        nodoDestino = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         posActual = new javax.swing.JTextField();
@@ -86,6 +86,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         areaReloj = new javax.swing.JTextField();
         botonPararHora = new javax.swing.JButton();
         botonAvanzar = new javax.swing.JButton();
+        comboOrigen = new javax.swing.JComboBox<>();
+        comboDestino = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("TravelMap GT");
@@ -127,12 +129,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
         jLabel3.setText("Origen:");
 
-        nodoOrigen.setFont(new java.awt.Font("Comic Sans MS", 0, 12)); // NOI18N
-
         jLabel4.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
         jLabel4.setText("Destino:");
-
-        nodoDestino.setFont(new java.awt.Font("Comic Sans MS", 0, 12)); // NOI18N
 
         jLabel5.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
         jLabel5.setText("Realizar Movimientos:");
@@ -202,38 +200,40 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(jPanel1Layout.createSequentialGroup()
                                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(jLabel4)
-                                                    .addComponent(jLabel3))
+                                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                            .addComponent(jLabel4)
+                                                            .addComponent(jLabel3))
+                                                        .addGap(18, 18, 18)
+                                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                            .addComponent(comboOrigen, 0, 173, Short.MAX_VALUE)
+                                                            .addComponent(comboDestino, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                                        .addComponent(jLabel2)
+                                                        .addGap(18, 18, 18)
+                                                        .addComponent(jcomboTipoViaje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                            .addComponent(posActual, javax.swing.GroupLayout.Alignment.LEADING)
+                                                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                        .addGap(32, 32, 32)
+                                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                            .addComponent(sigPosicion, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                                        .addGap(38, 38, 38)
+                                                        .addComponent(jLabel7))
+                                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                                        .addGap(49, 49, 49)
+                                                        .addComponent(botonEmpezarViaje))
+                                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                                        .addGap(26, 26, 26)
+                                                        .addComponent(jLabel5)))
                                                 .addGap(18, 18, 18)
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(nodoOrigen, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                    .addComponent(nodoDestino, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addComponent(jLabel2)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(jcomboTipoViaje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                    .addComponent(posActual, javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                                .addGap(32, 32, 32)
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addComponent(sigPosicion, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGap(38, 38, 38)
-                                                .addComponent(jLabel7))
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGap(29, 29, 29)
-                                                .addComponent(jLabel5))
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGap(55, 55, 55)
-                                                .addComponent(botonEmpezarViaje))
-                                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                                .addGap(66, 66, 66)
+                                                .addGap(76, 76, 76)
                                                 .addComponent(botonAvanzar)))
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
                                         .addComponent(etiquetaGrafoImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 515, javax.swing.GroupLayout.PREFERRED_SIZE))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -274,48 +274,48 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addGap(21, 21, 21)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(jcomboTipoViaje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(37, 37, 37)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(nodoOrigen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(nodoDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(17, 17, 17)
-                        .addComponent(botonEmpezarViaje)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel5)
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(sigPosicion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(posActual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(botonAvanzar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel7)
+                            .addGap(21, 21, 21)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel2)
+                                .addComponent(jcomboTipoViaje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(18, 18, 18)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel3)
+                                .addComponent(comboOrigen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(18, 18, 18)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel4)
+                                .addComponent(comboDestino, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGap(20, 20, 20)
+                            .addComponent(botonEmpezarViaje)
+                            .addGap(18, 18, 18)
+                            .addComponent(jLabel5)
+                            .addGap(18, 18, 18)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel6)
+                                .addComponent(jLabel8))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(posActual, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(sigPosicion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(botonAvanzar)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE))
+                        .addGroup(jPanel1Layout.createSequentialGroup()
                             .addComponent(jSeparator1)
-                            .addComponent(etiquetaGrafoImagen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(35, 35, 35)))
+                            .addGap(40, 40, 40)))
+                    .addComponent(etiquetaGrafoImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 335, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 4, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addComponent(jLabel9)
-                        .addGap(45, 45, 45))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(15, 15, 15))))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addGap(66, 66, 66))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -352,7 +352,15 @@ public class VentanaPrincipal extends javax.swing.JFrame {
                 //System.out.println(contenido.toString());
                 CargarDatos.cargarDatosRutas(contenido.toString(), grafos);
                 generarGrafoPrincipal();
-                grafos.imprimirNodos();
+                
+                HashMap<String, Nodo> nodosOrigen = grafos.getNodosOrigen();
+                for (Map.Entry<String, Nodo> entry : nodosOrigen.entrySet()) {
+                    Nodo nodo = entry.getValue();
+                    comboOrigen.addItem(nodo.getNombreOrigen());
+                    comboDestino.addItem(nodo.getNombreOrigen());
+                }
+                
+                //grafos.imprimirNodos();
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
@@ -361,13 +369,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void botonEmpezarViajeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonEmpezarViajeActionPerformed
         // TODO add your handling code here:
-        String origen = nodoOrigen.getText();
-        String destino = nodoDestino.getText();
-        
+        //String origen = nodoOrigen.getText();
+        //String destino = nodoDestino.getText();
+        String origen = (String) comboOrigen.getSelectedItem();
+        String destino = (String) comboDestino.getSelectedItem();
         recorrerViaje(origen, destino);
         posActual.setText(origen);
         
-        
+        generarGrafoPrincipal();
         generarGrafoRutas();
         generarArbolB();
     }//GEN-LAST:event_botonEmpezarViajeActionPerformed
@@ -445,8 +454,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             RecorridosGrafo.encontrarCaminosVehiculo(grafos.buscarNodo(origen), grafos.buscarNodo(destino), new HashSet<>(), new ArrayList<>(), distanciaTotal, todasLasRutas);
             
             
-            
-            
             areaDeRutas.setText(RecorridosGrafo.imprimirRutasVehiculo(todasLasRutas, obtenerHora()));
 
         }else{
@@ -455,12 +462,12 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             int distanciaTotal = 0;
             RecorridosGrafo.encontrarCaminosNoDirigido(grafos.buscarNodoNoDirigio(origen), grafos.buscarNodoNoDirigio(destino), new HashSet<>(), new ArrayList<>(), distanciaTotal, todasLasRutas);
             
-            
+            areaDeRutas.setText(RecorridosGrafo.imprimirRutasCaminando(todasLasRutas));
         }
         sigPosicion.removeAllItems();
         
         if(posActual.getText()==null){
-            posActual.setText(nodoOrigen.getText());
+            posActual.setText((String) comboOrigen.getSelectedItem());
         }
         List<String> elementos = new ArrayList<>();
         
@@ -522,7 +529,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private void botonAvanzarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonAvanzarActionPerformed
         
         String origen = (String) sigPosicion.getSelectedItem();
-        String destino = nodoDestino.getText();
+        String destino = (String) comboDestino.getSelectedItem();
+        //String destino = nodoDestino.getText();
         
         recorrerViaje(origen, destino);
         
@@ -536,10 +544,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
     private void generarGrafoPrincipal(){
         String dotFilePath = "grafoP.dot";
-        Graficas.generarArchivoDOT(dotFilePath, grafos);
+        
+        String tipoDeViaje = (String) jcomboTipoViaje.getSelectedItem();
+        if (tipoDeViaje.equalsIgnoreCase("Vehiculo")) {
+            Graficas.generarArchivoDOT(dotFilePath, grafos);
+        }else{
+            Graficas.generarArchivoDOTNoDirigido(dotFilePath, grafos);
+        }
+        
 
         // Generar la imagen del grafo usando Graphviz
         String outputFormat = "grafoP.png"; // Puedes cambiar el formato de salida aquí
+        
         Graficas.generarImagenGrafo(dotFilePath, outputFormat);
         
         try{
@@ -567,8 +583,13 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     
     private void generarGrafoRutas(){
         String dotFilePath = "grafoRutas.dot";
-        Graficas.generarArchivoDOTRutasSeleccionadas(dotFilePath, grafos, todasLasRutas, nodoDestino.getText());
-
+         String tipoDeViaje = (String) jcomboTipoViaje.getSelectedItem();
+        if (tipoDeViaje.equalsIgnoreCase("Vehiculo")) {
+            Graficas.generarArchivoDOTRutasSeleccionadas(dotFilePath, grafos, todasLasRutas, (String) comboDestino.getSelectedItem());
+        }else{
+            Graficas.generarArchivoDOTRutasCaminando(dotFilePath, grafos, todasLasRutas, (String) comboDestino.getSelectedItem());
+        }
+        
         // Generar la imagen del grafo usando Graphviz
         String outputFormat = "grafoRutas.png"; // Puedes cambiar el formato de salida aquí
         Graficas.generarImagenGrafo(dotFilePath, outputFormat);
@@ -625,6 +646,8 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JButton botonPararHora;
     private javax.swing.JButton cargarRutas;
     private javax.swing.JButton cargarTrafico;
+    private javax.swing.JComboBox<String> comboDestino;
+    private javax.swing.JComboBox<String> comboOrigen;
     private javax.swing.JLabel etiquetaGrafoImagen;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -641,8 +664,6 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JComboBox<String> jcomboTipoViaje;
-    private javax.swing.JTextField nodoDestino;
-    private javax.swing.JTextField nodoOrigen;
     private javax.swing.JTextField posActual;
     private javax.swing.JComboBox<String> sigPosicion;
     // End of variables declaration//GEN-END:variables

@@ -5,6 +5,7 @@
 package com.rudyreyes.travelmapgt.controlador;
 
 import com.rudyreyes.travelmapgt.modelo.grafo.Arista;
+import com.rudyreyes.travelmapgt.modelo.grafo.MejoresRutasCaminando;
 import com.rudyreyes.travelmapgt.modelo.grafo.MejoresRutasTrafico;
 import com.rudyreyes.travelmapgt.modelo.grafo.Nodo;
 import com.rudyreyes.travelmapgt.modelo.grafo.Trafico;
@@ -227,8 +228,112 @@ public class RecorridosGrafo {
     }
     
     public static String imprimirRutasCaminando(List<List<Nodo>> todasLasRutas){
+        MejoresRutasCaminando rutas = new MejoresRutasCaminando();
+
+        int mejorDesgaste = 0;
+        int peorDesgaste = 0;
+        int mejorDistancia = 0;
+        int peorDistancia = 0;
+        double mejorPromFisiD = 0;
+        double peorPromFisiD = 0;
+        double mejorRap = 0;
+        double peorRap = 0;
+        int iteracion = 0;
         
-        return null;
+        for (List<Nodo> camino : todasLasRutas) {
+            //RUTAS ESPECIFICAS
+            
+            
+            // Trabajar con cada ruta aquí
+            List<Double> velocidades = new ArrayList<>();
+            String ruta = "";
+
+            int distancia = 0;
+            int desgaste = 0;
+            //A->B->C->D
+            for (int i = 0; i < camino.size(); i++) {
+                ruta += camino.get(i).getNombreOrigen() + " ->";
+                //System.out.println("Ruta"+ ruta);
+                if (i + 1 < camino.size()) {
+                    int distanciaC = camino.get(i).getDestino(camino.get(i + 1).getNombreOrigen()).getDistancia();
+                    distancia += distanciaC;
+                    desgaste += camino.get(i).getDestino(camino.get(i + 1).getNombreOrigen()).getDesgastePersona();
+
+                    int tiempo = camino.get(i).getDestino(camino.get(i + 1).getNombreOrigen()).getTiempoVehiculo();
+                    
+                    double rapidez = (double) distanciaC/tiempo ;
+                    
+                    //System.out.println("Rapidez" + rapidez);
+                    velocidades.add(rapidez);
+
+                    
+                }
+            }
+
+            double sumaVelocidades = 0.0;
+            for (double velocidad : velocidades) {
+                sumaVelocidades += velocidad;
+            }
+
+            double promedioVelocidades = sumaVelocidades / velocidades.size();
+
+            double promFisicoD = (double) distancia / desgaste;
+            
+            //PARA DISTANCIA
+            if(iteracion == 0){
+                mejorDistancia = distancia;
+                peorDistancia = distancia;
+                mejorDesgaste = desgaste;
+                peorDesgaste = desgaste;
+                mejorPromFisiD = promFisicoD;
+                peorPromFisiD = promFisicoD;
+                mejorRap = promedioVelocidades;
+                peorRap = promedioVelocidades;
+                
+                rutas.rutasIniciales(ruta, distancia, desgaste, promFisicoD, promedioVelocidades);
+            }else{
+                //DISTANCIA
+                if(distancia<=mejorDistancia){
+                    rutas.setMejorDistancia(ruta + " Distancia total: "+distancia);
+                    mejorDistancia = distancia;
+                }else if(distancia>=peorDistancia){
+                    rutas.setPeorDistancia(ruta + " Distancia total: "+distancia);
+                    peorDistancia = distancia;
+                }
+                
+                //DESGASTE
+                if(desgaste<= mejorDesgaste){
+                    rutas.setMejorDesgaste(ruta + " Desgaste Total: "+desgaste);
+                    mejorDesgaste =desgaste;
+                }else if(desgaste >= peorDesgaste){
+                    rutas.setPeorDesgaste(ruta + " Desgaste Total: "+desgaste);
+                    peorDesgaste=desgaste;
+                }
+                
+                //DISTANCIA/DES
+                if(promFisicoD<= mejorPromFisiD){
+                    rutas.setMejorPromFisicoD(ruta+" Promedio Distancia/Desgaste:"+ String.format("%.4f", promFisicoD));
+                    mejorPromFisiD = promFisicoD;
+                }else if(promFisicoD >= peorPromFisiD){
+                    rutas.setPeorPromFisicoD(ruta +" Promedio Distancia/Desgaste:"+ String.format("%.4f", promFisicoD));
+                    peorPromFisiD = promFisicoD;
+                }
+                
+                //RAPIDEZ
+                if(promedioVelocidades>= mejorRap){
+                    rutas.setMejorRapidez(ruta +" Promedio Velocidad:"+ String.format("%.4f", promedioVelocidades));
+                    mejorRap = promedioVelocidades;
+                }else if(promedioVelocidades <= peorRap){
+                    rutas.setPeorRapidez(ruta +" Promedio Velocidad:"+ String.format("%.4f", promedioVelocidades));
+                    peorRap = promedioVelocidades;
+                }
+                
+            }
+            
+            iteracion ++;
+        }
+        
+        return rutas.imprimirRutas();
     }
     
     private static double obtenerProbabilidad(Arista destino, int hora){

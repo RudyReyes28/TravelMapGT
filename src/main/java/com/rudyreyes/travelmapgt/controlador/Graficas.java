@@ -99,6 +99,51 @@ public class Graficas {
         }
     }
     
+     public static void generarArchivoDOTRutasCaminando(String dotFilePath, Grafo grafo, List<List<Nodo>> todasLasRutas, String destino) {
+         Set<String> rutasSeleccionadas = rutasSeleccionadas(todasLasRutas);
+         Set<String> conexionesAgregadas = new HashSet<>();
+         try (FileWriter writer = new FileWriter(dotFilePath)) {
+            writer.write("graph G {\n");
+            
+            HashMap<String, Nodo> nodosOrigen = grafo.getNodosOrigenNoDirigido();
+            
+            String grafoD = "";
+            for (Map.Entry<String, Nodo> entry : nodosOrigen.entrySet()) {
+                Nodo nodo = entry.getValue();
+
+                if (!nodo.getDestinos().isEmpty()) {
+                    for (Arista arista : nodo.getDestinos()) {
+                        
+                        String conexion = nodo.getNombreOrigen().compareTo(arista.getDestino().getNombreOrigen()) < 0
+                            ? nodo.getNombreOrigen() + "--" + arista.getDestino().getNombreOrigen()
+                            : arista.getDestino().getNombreOrigen() + "--" + nodo.getNombreOrigen();
+                        
+                        if (!conexionesAgregadas.contains(conexion)) {
+                           String flechas = nodo.getNombreOrigen() + "->" + arista.getDestino().getNombreOrigen();
+                            if (rutaEncontrada(rutasSeleccionadas, flechas)) {
+
+                                grafoD += nodo.getNombreOrigen() + "[style=filled, fillcolor=blue];\n";
+                                grafoD += conexion + "[color=green]" + "[label=\"" + arista.getDistancia() + "\"];" + "\n";
+                            } else {
+                                grafoD += conexion + "[label=\"" + arista.getDistancia() + "\"];" + "\n";
+                            }
+                            conexionesAgregadas.add(conexion); // Agregar la conexión al conjunto de conexiones agregadas
+                        }
+                        
+                    }
+                }
+
+            }
+            grafoD += destino +"[style=filled, fillcolor=red];\n";
+            //writer.write("size=\"8,8\";\n");
+            writer.write(grafoD);
+            writer.write("}\n");
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+     }
+    
     private static boolean rutaEncontrada(Set<String> rutas, String ruta){
         //System.out.println(ruta);
         for(String flecha: rutas){

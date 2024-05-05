@@ -1,3 +1,3 @@
 digraph G {
-"[A ->B | A ->F ->D ->E ->B]" [label="[A ->B | A ->F ->D ->E ->B]"];
+"[SanPedroSacatepequez ->Quetzaltenango ->Retalhuleu ->Quiche]" [label="[SanPedroSacatepequez ->Quetzaltenango ->Retalhuleu ->Quiche]"];
 }
