@@ -58,52 +58,21 @@ public class RecorridosGrafo {
     }
     
     
-    public static String imprimirRuta(List<Nodo> camino, int hora){
-        int horaT = hora;
-        List<Double> velocidades = new ArrayList<>();
+    public static String imprimirRuta(List<Nodo> camino){
         String ruta = "";
         
-        int distancia = 0;
-        int gasolina = 0;
         //A->B->C->D
         for(int i=0; i<camino.size(); i++){
-            ruta += camino.get(i).getNombreOrigen()+" ->";
-            if(i+1<camino.size()){
-                int distanciaC =camino.get(i).getDestino(camino.get(i+1).getNombreOrigen()).getDistancia();
-                distancia += distanciaC;
-                gasolina += camino.get(i).getDestino(camino.get(i+1).getNombreOrigen()).getConsumoGas();
-            
-                int tiempo = camino.get(i).getDestino(camino.get(i+1).getNombreOrigen()).getTiempoVehiculo();
-                double probabilidad = obtenerProbabilidad(camino.get(i).getDestino(camino.get(i+1).getNombreOrigen()), horaT);
-                //System.out.println("Tiempo: "+tiempo+" Hora: "+horaT+" Probabilidad: "+probabilidad);
-                
-                double rapidez = distanciaC / (tiempo *(1+probabilidad));
-                velocidades.add(rapidez);
-                
-                
-                horaT+=tiempo;
-                if(horaT>=24){
-                    horaT = 0+tiempo-1;
-                }
+            if(i==camino.size()-1){
+                ruta += camino.get(i).getNombreOrigen();
+            }else{
+                ruta += camino.get(i).getNombreOrigen()+" ->";
             }
-        }
-        
-        double sumaVelocidades = 0.0;
-        for (double velocidad : velocidades) {
-            sumaVelocidades += velocidad;
-        }
-
-        double promedioVelocidades = sumaVelocidades / velocidades.size();
-        
-        ruta += "\n   distancia total: "+distancia;
-        ruta += " gasolina total: " + gasolina;
-        ruta += " promedio gasolina distancia: "+ (double) distancia/gasolina;
-        ruta += " rapidez: "+promedioVelocidades;
-        /*
-        for (Nodo nodo : camino) {
-            ruta += nodo.getNombreOrigen() + " -> ";
             
-        }*/
+            
+        }
+        
+       
         
         return ruta;
     }

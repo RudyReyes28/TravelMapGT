@@ -6,8 +6,10 @@ package com.rudyreyes.travelmapgt.vista;
 
 import com.rudyreyes.travelmapgt.controlador.CargarDatos;
 import com.rudyreyes.travelmapgt.controlador.Graficas;
+import com.rudyreyes.travelmapgt.controlador.GraficasArbolB;
 import com.rudyreyes.travelmapgt.controlador.RecorridosGrafo;
 import com.rudyreyes.travelmapgt.controlador.Reloj;
+import com.rudyreyes.travelmapgt.modelo.arbolb.ArbolB;
 import com.rudyreyes.travelmapgt.modelo.grafo.Grafo;
 import com.rudyreyes.travelmapgt.modelo.grafo.Nodo;
 import java.awt.Desktop;
@@ -334,7 +336,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         //Necesito obtener un string
         JFileChooser fc = new JFileChooser();
-        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos de texto (*.txt, *.py, *.xml)", "txt", "py", "xml");
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos de texto (*.txt, *.py, *.xml, *.csv)", "txt", "py", "xml", "csv");
         fc.setFileFilter(filtro);
 
         int seleccion = fc.showOpenDialog(this);
@@ -367,13 +369,14 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         
         
         generarGrafoRutas();
+        generarArbolB();
     }//GEN-LAST:event_botonEmpezarViajeActionPerformed
 
     private void cargarTraficoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarTraficoActionPerformed
         // TODO add your handling code here:
         
         JFileChooser fc = new JFileChooser();
-        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos de texto (*.txt, *.py, *.xml)", "txt", "py", "xml");
+        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Archivos de texto (*.txt, *.py, *.xml, *.csv)", "txt", "py", "xml","csv");
         fc.setFileFilter(filtro);
 
         int seleccion = fc.showOpenDialog(this);
@@ -405,6 +408,26 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             return Integer.parseInt(horaStr);
     }
     
+    private void generarArbolB() {
+        ArbolB arbolB = new ArbolB(3);
+
+        List<String> rutas = new ArrayList<>();
+        for (List<Nodo> ruta : todasLasRutas) {
+            // Trabajar con cada ruta aquí
+            String rutaA = RecorridosGrafo.imprimirRuta(ruta);
+            rutas.add(rutaA);
+        }
+
+        for (int i = 0; i < rutas.size(); i++) {
+            arbolB.insertar(i);
+        }
+
+        String dotFilePath = "arbolB.dot";
+        GraficasArbolB.generarDOT(dotFilePath, arbolB.root, rutas);
+        GraficasArbolB.generarImagenGrafo(dotFilePath, "arbolB.png");
+        //System.out.println(rutas);
+    }
+    
     private void recorrerViaje(String origen, String destino){
         String tipoDeViaje = (String) jcomboTipoViaje.getSelectedItem();
         if (tipoDeViaje.equalsIgnoreCase("Vehiculo")) {
@@ -412,13 +435,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
             int distanciaTotal = 0;
             RecorridosGrafo.encontrarCaminosVehiculo(grafos.buscarNodo(origen), grafos.buscarNodo(destino), new HashSet<>(), new ArrayList<>(), distanciaTotal, todasLasRutas);
             
-            /*String rutas="";
-            for (List<Nodo> ruta : todasLasRutas) {
-                // Trabajar con cada ruta aquí
-                rutas += RecorridosGrafo.imprimirRuta( ruta, obtenerHora())+"\n";
-                
-            }*/
-            //System.out.println(rutas);
+            
             
             
             areaDeRutas.setText(RecorridosGrafo.imprimirRutasVehiculo(todasLasRutas, obtenerHora()));
@@ -496,6 +513,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         recorrerViaje(origen, destino);
         
         generarGrafoRutas();
+        generarArbolB();
         posActual.setText(origen);
         
         

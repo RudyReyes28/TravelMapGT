@@ -27,7 +27,7 @@ public class Graficas {
         try (FileWriter writer = new FileWriter(dotFilePath)) {
             writer.write("digraph G {\n");
             String archivo = grafo.imprimirGrafo();
-            writer.write("size=\"8,8\";\n");
+            //writer.write("size=\"8,8\";\n");
             writer.write(archivo);
             writer.write("}\n");
             writer.flush();
@@ -77,7 +77,7 @@ public class Graficas {
 
             }
             grafoD += destino +"[style=filled, fillcolor=red];\n";
-            writer.write("size=\"8,8\";\n");
+            //writer.write("size=\"8,8\";\n");
             writer.write(grafoD);
             writer.write("}\n");
             writer.flush();

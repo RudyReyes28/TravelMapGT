@@ -4,6 +4,8 @@
 
 package com.rudyreyes.travelmapgt;
 
+import com.rudyreyes.travelmapgt.modelo.arbolb.ArbolB;
+import com.rudyreyes.travelmapgt.modelo.arbolb.NodoArbolB;
 import com.rudyreyes.travelmapgt.modelo.grafo.Arista;
 import com.rudyreyes.travelmapgt.modelo.grafo.Grafo;
 import com.rudyreyes.travelmapgt.modelo.grafo.Nodo;
@@ -11,6 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -21,7 +24,7 @@ import java.util.Set;
 public class TravelMapGT {
 
     public static void main(String[] args) {
-        
+        /*
         Grafo grafos = new Grafo();
         String datos = "A|B|10|20|5|3|30\n" +
 "A|F|15|25|6|4|40\n" +
@@ -36,88 +39,64 @@ public class TravelMapGT {
 "E|B|8|18|3|2|20\n" +
 "E|F|10|20|5|3|30\n" +
 "F|D|15|25|6|4|40\n" +
-"F|G|10|20|5|3|30";
+"F|G|10|20|5|3|30";*/
+        //grado minimo del Arbol B es t=3
+        //Cada nodo soporta 2t hijos y 2t-1 claves
+        int t = 3;
+        //Se crea el arbol B segun t
+        ArbolB arbolB = new ArbolB(t);
+        List <String> rutas = new ArrayList<>();
+        rutas.add("A->B->C->D");
+        rutas.add("A->C->C->D");
+        rutas.add("A->D->C->D");
+        rutas.add("A->E->C->D");
+        rutas.add("A->F->C->D");
+        rutas.add("A->G->C->D");
+        rutas.add("A->H->C->D");
+        rutas.add("A->I->C->D");
+        rutas.add("A->J->C->D");
+        rutas.add("A->K->C->D");
         
-        cargarDatos(datos, grafos);
-        
-        
-        //grafos.imprimirNodos();
-        
-        
-       // Generar el archivo DOT
-       String dotFilePath = "graph.dot";
-       generarArchivoDOT(dotFilePath, grafos);
-
-        // Generar la imagen del grafo usando Graphviz
-        String outputFormat = "png"; // Puedes cambiar el formato de salida aquí
-        generarImagenGraphviz(dotFilePath, outputFormat);
-       int distanciaTotal = 0;
-        encontrarCaminos(grafos.buscarNodo("A"), grafos.buscarNodo("G"), new HashSet<>(), new ArrayList<>(), distanciaTotal);
-    }
-    
-    public static void cargarDatos(String datosArchivo, Grafo grafo) {
-        try {
-            //File file = new File(archivo);
-            Scanner scanner = new Scanner(datosArchivo);
-
-            while (scanner.hasNextLine()) {
-
-                String line = scanner.nextLine();
-                if (!line.isEmpty()) {
-                    String[] datos = line.split("\\|");
-
-                    String origen = datos[0];
-                    String destino = datos[1];
-                    int tiempoVehiculo = Integer.parseInt(datos[2]);
-                    int tiempoPie = Integer.parseInt(datos[3]);
-                    int consumoGas = Integer.parseInt(datos[4]);
-                    int desgastePersona = Integer.parseInt(datos[5]);
-                    int distancia = Integer.parseInt(datos[6]);
-
-                    // Crear nodo destino si no existe
-                    Nodo nodoDestino;
-                    if (grafo.buscarNodo(destino) != null) {
-                        nodoDestino = grafo.buscarNodo(destino);
-                    } else {
-                        nodoDestino = new Nodo(destino);
-                        grafo.agregarNodo(nodoDestino);
-                    }
-
-                    // Crear arista
-                    Arista arista = new Arista(nodoDestino, tiempoVehiculo, tiempoPie, consumoGas, desgastePersona, distancia);
-
-                    // Asignar arista al nodo origen
-                    Nodo nodoOrigen = grafo.buscarNodo(origen);
-                    if (nodoOrigen == null) {
-                        nodoOrigen = new Nodo(origen);
-                        grafo.agregarNodo(nodoOrigen);
-                    }
-                    nodoOrigen.setDestino(arista);
-                }
-
-            }
-
-            scanner.close();
-        } catch (Exception e) {
-            e.printStackTrace();
+        //Valores a ingresar primera ronda
+        int[] valoresUno = {20, 10, 50, 30, 40, 100, 200, 150, 151, 152, 153, 154, 155, 156,157,158,159,160,161,162,163};
+        System.out.println("-- INICIO --");
+        System.out.println("INSERTANDO VALORES AL ARBOL B");
+        for(int i=0; i<10; i++) {
+            System.out.println("Insertando... valor " + valoresUno[i]);
+            arbolB.insertar(i);
         }
-    }
+        
+        //Mostrando arbol B por pantalla en preorder
+        System.out.println("ESTADO ARBOL B");
+        arbolB.showBTree();
+        System.out.println("");
+        
+        
+        System.out.println("");
+        System.out.println("-- FIN --");
+        
+        
+        String dotFilePath = "arbol.dot";
+        generarDOT(dotFilePath, arbolB.root, rutas);
+        generarImagenGrafo(dotFilePath, "arbol.png");
+        
+      }
     
-     public static void generarArchivoDOT(String dotFilePath, Grafo grafo) {
-        try (FileWriter writer = new FileWriter(dotFilePath)) {
-            writer.write("digraph G {\n");
-            String archivo = grafo.imprimirGrafo();
-            writer.write("size=\"8,8\";\n");
-            writer.write(archivo);
-            writer.write("}\n");
-            writer.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
+    public static void generarDOT(String archivoDot, NodoArbolB root, List<String> rutas) {
+    try (FileWriter writer = new FileWriter(archivoDot)) {
+        writer.write("digraph G {\n");
 
-    public static void generarImagenGraphviz(String dotFilePath, String outputFormat) {
-        String command = "dot -T" + outputFormat + " -Gratio=fill -o graph." + outputFormat + " " + dotFilePath;
+        // Llamar al método para generar el DOT del árbol
+        bucarPaginas(root, writer, rutas);
+
+        writer.write("}\n");
+        writer.flush();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+    public static void generarImagenGrafo(String dotFilePath, String nombreImagen) {
+        String command = "dot -T png -Gratio=fill -o " + nombreImagen + " " + dotFilePath;
         try {
             Process process = Runtime.getRuntime().exec(command);
             int exitCode = process.waitFor();
@@ -130,42 +109,24 @@ public class TravelMapGT {
             e.printStackTrace();
         }
     }
-        
-    public static void encontrarCaminos(Nodo nodoActual, Nodo nodoDestino, Set<Nodo> visitados, ArrayList<Nodo> caminoActual, int distanciaTotal) {
-        // Marcar el nodo actual como visitado
-        visitados.add(nodoActual);
+    private static void bucarPaginas(NodoArbolB n, FileWriter writer, List<String> rutas) throws IOException {
+        // Generar el DOT del nodo actual
+        String nodoDOT = "\"" + n.imprimirRutas(rutas) + "\" [label=\"" + n.imprimirRutas(rutas) + "\"];\n";
+        writer.write(nodoDOT);
 
-        // Agregar el nodo actual al camino actual
-        caminoActual.add(nodoActual);
-        
+        // Si no es hoja, generar los enlaces con los hijos
+        if (!n.leaf) {
+            for (int j = 0; j <= n.n; j++) {
+                if (n.child[j] != null) {
+                    // Generar el DOT del enlace con el hijo
+                    String enlaceDOT = "\"" + n.imprimirRutas(rutas) + "\" -> \"" + n.child[j].imprimirRutas(rutas) + "\";\n";
+                    writer.write(enlaceDOT);
 
-        // Si el nodo actual es el nodo destino, imprimir el camino actual
-        if (nodoActual.equals(nodoDestino)) {
-            imprimirCamino(caminoActual);
-            System.out.println("Distancia total: " + distanciaTotal);
-        } else {
-            // Recorrer todos los destinos del nodo actual
-            for (Arista arista : nodoActual.getDestinos()) {
-                Nodo siguienteNodo = arista.getDestino();
-                int peso = arista.getDistancia();
-                // Si el siguiente nodo no ha sido visitado aún, continuar explorando desde él
-                if (!visitados.contains(siguienteNodo)) {
-                    encontrarCaminos(siguienteNodo, nodoDestino, visitados, caminoActual, distanciaTotal+peso);
+                    // Llamar recursivamente al método para el hijo
+                    bucarPaginas(n.child[j], writer, rutas);
                 }
             }
         }
-
-        // Desmarcar el nodo actual como visitado y eliminarlo del camino actual
-        visitados.remove(nodoActual);
-        caminoActual.remove(nodoActual);
     }
 
-    // Método para imprimir un camino
-    public static void imprimirCamino(ArrayList<Nodo> camino) {
-        for (Nodo nodo : camino) {
-            System.out.print(nodo.getNombreOrigen() + " -> ");
-        }
-        System.out.println();
-    }
-    
 }
