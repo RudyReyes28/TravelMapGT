@@ -88,15 +88,15 @@ public class MejoresRutasTrafico {
         this.peorRapidez = peorRapidez;
     }
     
-    public void rutasIniciales(String rutaInicial){
-        mejorGasolina = rutaInicial;
-        peorGasolina = rutaInicial;
-        mejorDistancia = rutaInicial;
-        peorDistancia = rutaInicial;
-        mejorPromGasD = rutaInicial;
-        peorPromGasD = rutaInicial;
-        mejorRapidez = rutaInicial;
-        peorRapidez = rutaInicial;
+    public void rutasIniciales(String rutaInicial, int distancia, int gasolina, double gasdis, double velocidad){
+        mejorGasolina = rutaInicial + " Gasolina Total: "+gasolina ;
+        peorGasolina = rutaInicial + " Gasolina Total: "+gasolina;
+        mejorDistancia = rutaInicial + " Distancia total: "+distancia;
+        peorDistancia = rutaInicial + " Distancia total: "+distancia;
+        mejorPromGasD = rutaInicial +" Promedio Distancia/Gas:"+ String.format("%.4f", gasdis);
+        peorPromGasD = rutaInicial +" Promedio Distancia/Gas:"+ String.format("%.4f", gasdis);
+        mejorRapidez = rutaInicial +" Promedio Velocidad:"+ String.format("%.4f", velocidad);
+        peorRapidez = rutaInicial +" Promedio Velocidad:"+ String.format("%.4f", velocidad);
     }
     
     

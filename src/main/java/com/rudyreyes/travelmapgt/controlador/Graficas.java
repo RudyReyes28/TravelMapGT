@@ -35,6 +35,19 @@ public class Graficas {
             e.printStackTrace();
         }
     }
+    
+    public static void generarArchivoDOTNoDirigido(String dotFilePath, Grafo grafo) {
+        try (FileWriter writer = new FileWriter(dotFilePath)) {
+            writer.write("graph G {\n");
+            String archivo = grafo.imprimirGrafoNoDirigido();
+            //writer.write("size=\"8,8\";\n");
+            writer.write(archivo);
+            writer.write("}\n");
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     public static void generarImagenGrafo(String dotFilePath, String nombreImagen) {
         String command = "dot -T png -Gratio=fill -o " + nombreImagen + " " + dotFilePath;

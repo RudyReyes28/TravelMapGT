@@ -94,7 +94,7 @@ public class Arista {
     public void setTrafico(Trafico trafico) {
         this.trafico.add(trafico);
     }
-
+    
     @Override
     public String toString() {
         String datos = "Arista{" + "destino=" + destino.getNombreOrigen() + ", \ntiempoVehiculo=" + tiempoVehiculo + ", \ntiempoPie=" + tiempoPie + ", \nconsumoGas=" + consumoGas + ", \ndesgastePersona=" + desgastePersona + ", \ndistancia=" + distancia ;

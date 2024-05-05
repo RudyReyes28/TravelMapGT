@@ -1,9 +1,0 @@
-digraph G {
-"[A->D->C->D | A->G->C->D]" [label="[A->D->C->D | A->G->C->D]"];
-"[A->D->C->D | A->G->C->D]" -> "[A->B->C->D | A->C->C->D]";
-"[A->B->C->D | A->C->C->D]" [label="[A->B->C->D | A->C->C->D]"];
-"[A->D->C->D | A->G->C->D]" -> "[A->E->C->D | A->F->C->D]";
-"[A->E->C->D | A->F->C->D]" [label="[A->E->C->D | A->F->C->D]"];
-"[A->D->C->D | A->G->C->D]" -> "[A->H->C->D | A->I->C->D | A->J->C->D | A->K->C->D]";
-"[A->H->C->D | A->I->C->D | A->J->C->D | A->K->C->D]" [label="[A->H->C->D | A->I->C->D | A->J->C->D | A->K->C->D]"];
-}

@@ -49,6 +49,36 @@ public class RecorridosGrafo {
         caminoActual.remove(nodoActual);
     }
     
+        public static void encontrarCaminosNoDirigido(Nodo nodoActual, Nodo nodoDestino, Set<Nodo> visitados, ArrayList<Nodo> caminoActual, int distanciaTotal, List<List<Nodo>> todasLasRutas) {
+        // Marcar el nodo actual como visitado
+        visitados.add(nodoActual);
+
+        // Agregar el nodo actual al camino actual
+        caminoActual.add(nodoActual);
+
+        // Si el nodo actual es el nodo destino, imprimir el camino actual
+        if (nodoActual.equals(nodoDestino)) {
+            todasLasRutas.add(new ArrayList<>(caminoActual));
+            imprimirCamino(caminoActual);
+            System.out.println("Distancia total: " + distanciaTotal);
+        } else {
+            // Recorrer todos los destinos del nodo actual
+            for (Arista arista : nodoActual.getDestinos()) {
+                Nodo siguienteNodo = arista.getDestino();
+                int peso = arista.getDistancia();
+                // Verificar si el siguiente nodo no ha sido visitado aún y no está en el camino actual
+                if (!visitados.contains(siguienteNodo) && !caminoActual.contains(siguienteNodo)) {
+                    encontrarCaminosNoDirigido(siguienteNodo, nodoDestino, visitados, caminoActual, distanciaTotal + peso, todasLasRutas);
+                }
+            }
+        }
+
+        // Desmarcar el nodo actual como visitado y eliminarlo del camino actual
+        visitados.remove(nodoActual);
+        caminoActual.remove(nodoActual);
+    }
+
+    
     // Método para imprimir un camino
     public static void imprimirCamino(ArrayList<Nodo> camino) {
         for (Nodo nodo : camino) {
@@ -150,41 +180,41 @@ public class RecorridosGrafo {
                 mejorRap = promedioVelocidades;
                 peorRap = promedioVelocidades;
                 
-                rutas.rutasIniciales(ruta);
+                rutas.rutasIniciales(ruta, distancia, gasolina, promGasDis, promedioVelocidades);
             }else{
                 //DISTANCIA
                 if(distancia<=mejorDistancia){
-                    rutas.setMejorDistancia(ruta);
+                    rutas.setMejorDistancia(ruta + " Distancia total: "+distancia);
                     mejorDistancia = distancia;
                 }else if(distancia>=peorDistancia){
-                    rutas.setPeorDistancia(ruta);
+                    rutas.setPeorDistancia(ruta + " Distancia total: "+distancia);
                     peorDistancia = distancia;
                 }
                 
                 //GASOLINA
                 if(gasolina<= mejorGas){
-                    rutas.setMejorGasolina(ruta);
+                    rutas.setMejorGasolina(ruta + " Gasolina Total: "+gasolina);
                     mejorGas =gasolina;
                 }else if(gasolina >= peorGas){
-                    rutas.setPeorGasolina(ruta);
+                    rutas.setPeorGasolina(ruta + " Gasolina Total: "+gasolina);
                     peorGas=gasolina;
                 }
                 
                 //DISTANCIA/GAS
                 if(promGasDis<= mejorPromGasD){
-                    rutas.setMejorPromGasD(ruta);
+                    rutas.setMejorPromGasD(ruta+" Promedio Distancia/Gas:"+ String.format("%.4f", promGasDis));
                     mejorPromGasD = promGasDis;
                 }else if(promGasDis >= peorPromGasD){
-                    rutas.setPeorPromGasD(ruta);
+                    rutas.setPeorPromGasD(ruta +" Promedio Distancia/Gas:"+ String.format("%.4f", promGasDis));
                     peorPromGasD = promGasDis;
                 }
                 
                 //RAPIDEZ
                 if(promedioVelocidades>= mejorRap){
-                    rutas.setMejorRapidez(ruta);
+                    rutas.setMejorRapidez(ruta +" Promedio Velocidad:"+ String.format("%.4f", promedioVelocidades));
                     mejorRap = promedioVelocidades;
                 }else if(promedioVelocidades <= peorRap){
-                    rutas.setPeorRapidez(ruta);
+                    rutas.setPeorRapidez(ruta +" Promedio Velocidad:"+ String.format("%.4f", promedioVelocidades));
                     peorRap = promedioVelocidades;
                 }
                 
@@ -194,6 +224,11 @@ public class RecorridosGrafo {
         }
         
         return rutas.imprimirRutas();
+    }
+    
+    public static String imprimirRutasCaminando(List<List<Nodo>> todasLasRutas){
+        
+        return null;
     }
     
     private static double obtenerProbabilidad(Arista destino, int hora){

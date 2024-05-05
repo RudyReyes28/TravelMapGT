@@ -423,9 +423,18 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         }
 
         String dotFilePath = "arbolB.dot";
+        String outputFormat = "arbolB.png";
         GraficasArbolB.generarDOT(dotFilePath, arbolB.root, rutas);
-        GraficasArbolB.generarImagenGrafo(dotFilePath, "arbolB.png");
+        GraficasArbolB.generarImagenGrafo(dotFilePath,outputFormat );
         //System.out.println(rutas);
+        try {
+            String imagePath;
+            File imageFile = new File(outputFormat);
+            Desktop desktop = Desktop.getDesktop();
+            desktop.open(imageFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     
     private void recorrerViaje(String origen, String destino){
@@ -442,6 +451,11 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         }else{
             //AQUI SI ES CAMINANDO
+            todasLasRutas = new ArrayList<>();
+            int distanciaTotal = 0;
+            RecorridosGrafo.encontrarCaminosNoDirigido(grafos.buscarNodoNoDirigio(origen), grafos.buscarNodoNoDirigio(destino), new HashSet<>(), new ArrayList<>(), distanciaTotal, todasLasRutas);
+            
+            
         }
         sigPosicion.removeAllItems();
         

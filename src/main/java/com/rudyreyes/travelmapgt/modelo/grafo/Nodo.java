@@ -49,6 +49,16 @@ public class Nodo {
         
         return null;
     }
+    
+    public boolean destinoExiste(String nombreDestino){
+        for(Arista arista: destinos){
+            if(arista.getDestino().getNombreOrigen().equals(nombreDestino)){
+                return true;
+            }
+        }
+        
+        return false;
+    }
 
     public void setDestinos(ArrayList<Arista> destinos) {
         this.destinos = destinos;

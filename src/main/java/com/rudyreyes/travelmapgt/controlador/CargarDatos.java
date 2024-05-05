@@ -40,10 +40,12 @@ public class CargarDatos {
                         nodoDestino = new Nodo(destino);
                         grafo.agregarNodo(nodoDestino);
                     }
+                    
+                    
 
                     // Crear arista
                     Arista arista = new Arista(nodoDestino, tiempoVehiculo, tiempoPie, consumoGas, desgastePersona, distancia);
-
+                   
                     // Asignar arista al nodo origen
                     Nodo nodoOrigen = grafo.buscarNodo(origen);
                     if (nodoOrigen == null) {
@@ -51,6 +53,34 @@ public class CargarDatos {
                         grafo.agregarNodo(nodoOrigen);
                     }
                     nodoOrigen.setDestino(arista);
+                    
+                    //NO DIRIGIDOS
+                    //BUSCAMOS EL ORIGEN
+                    Nodo nodoDestinoNoDirigido;
+                    if (grafo.buscarNodoNoDirigio(destino) != null) {
+                        nodoDestinoNoDirigido = grafo.buscarNodoNoDirigio(destino);
+                    } else {
+                        nodoDestinoNoDirigido = new Nodo(destino);
+                        grafo.agregarNodoNoDirigido(nodoDestinoNoDirigido);
+                    }
+                    
+                    Nodo nodoOrigenNoDirigido = grafo.buscarNodoNoDirigio(origen);
+                    if (nodoOrigenNoDirigido == null) {
+                        nodoOrigenNoDirigido = new Nodo(origen);
+                        grafo.agregarNodoNoDirigido(nodoOrigenNoDirigido);
+                    }
+                    Arista noDirigidoOrigen = new Arista(nodoDestinoNoDirigido, tiempoVehiculo, tiempoPie, consumoGas, desgastePersona, distancia);
+                    Arista noDirigidoDestino = new Arista(nodoOrigenNoDirigido, tiempoVehiculo, tiempoPie, consumoGas, desgastePersona, distancia);
+                   
+                    if(!nodoOrigenNoDirigido.destinoExiste(destino)){
+                        nodoOrigenNoDirigido.setDestino(noDirigidoOrigen);
+                    }
+                    
+                    if(!nodoDestinoNoDirigido.destinoExiste(origen)){
+                        nodoDestinoNoDirigido.setDestino(noDirigidoDestino);
+                    }
+                    
+                   
                 }
 
             }
